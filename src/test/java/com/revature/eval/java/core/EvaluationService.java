@@ -1,6 +1,8 @@
 package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,7 +33,12 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String acr = "";
+		String[] splitStr = phrase.toUpperCase().trim().split("[\\s+ -]");
+		for(String word: splitStr) {
+			acr = acr + word.charAt(0);
+		}
+		return acr;
 	}
 
 	/**
@@ -85,16 +92,28 @@ public class EvaluationService {
 
 		public boolean isEquilateral() {
 			// TODO Write an implementation for this method declaration
+			if(sideOne == sideTwo && sideOne == sideThree) {
+				
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isIsosceles() {
 			// TODO Write an implementation for this method declaration
+			if(sideOne == sideTwo || sideOne == sideThree) {
+							
+				return true;
+			}
 			return false;
 		}
 
 		public boolean isScalene() {
 			// TODO Write an implementation for this method declaration
+			if(sideOne != sideTwo && sideTwo != sideThree) {
+				
+				return true;
+			}
 			return false;
 		}
 
@@ -117,7 +136,55 @@ public class EvaluationService {
 	 */
 	public int getScrabbleScore(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int value = 0;
+		String str = string.toUpperCase();
+		for (int i = 0; i < str.length(); i++) {
+			
+			switch(str.charAt(i)) {
+			
+			case 'A':
+			case 'E':
+			case 'I':
+			case 'O':
+			case 'U':
+			case 'L':
+			case 'N':
+			case 'R':
+			case 'S':
+			case 'T':
+				value++;
+				break;
+			case 'D':
+			case 'G':
+				value = value + 2;
+				break;
+			case 'B':
+			case 'C':
+			case 'M':
+			case 'P':
+				value  = value + 3;
+				break;
+			case 'F':
+			case 'H':
+			case 'V':
+			case 'W':
+			case 'Y':
+				value = value + 4;
+				break;
+			case 'K':
+				value = value + 5;
+				break;
+			case 'J':
+			case 'X':
+				value = value + 8;
+				break;
+			case 'Q':
+			case 'Z':
+				value = value + 10;
+				break;			
+			}
+		}
+		return value;
 	}
 
 	/**
@@ -153,7 +220,11 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		string = string.replaceAll("[^\\d]", "");
+		if(string.length()!=10) {
+			throw new IllegalArgumentException();
+		}
+		return string;
 	}
 
 	/**
@@ -167,7 +238,21 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		string = string.toLowerCase().trim();
+	    String words[] = string.split("[ ,\\n]+");
+	    for (String word: words) {
+	    	int count = 0;
+	    	if(!map.containsKey(word)) {
+	    		for(String temp: words) {
+	    			if(temp.equals(word)) {
+	    				count++;
+	    			}
+	    		}
+	    		map.put(word, count);
+	    	}
+	    }
+		return map;
 	}
 
 	/**
@@ -247,9 +332,74 @@ public class EvaluationService {
 	 */
 	public String toPigLatin(String string) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String[] phrase = string.toLowerCase().split(" ");
+		StringBuilder sb = new StringBuilder();
+		for(String str: phrase) {
+			List<Character> word = new ArrayList<Character>();
+			
+			if(str.startsWith("sch")) {
+				
+				for(int i = 3; i < str.length(); i++) {
+					
+					word.add(str.charAt(i));
+				}
+				word.add('s');
+				word.add('c');
+				word.add('h');
+				word.add('a');
+				word.add('y');
+			}else if(str.startsWith("th")) {
+				
+				for(int i = 2; i < str.length(); i++) {
+					
+					word.add(str.charAt(i));
+				}
+				word.add('t');
+				word.add('h');
+				word.add('a');
+				word.add('y');
+			}else if(str.startsWith("qu")) {
+	
+				for(int i = 2; i < str.length(); i++) {
+		
+					word.add(str.charAt(i));
+				}
+				word.add('q');
+				word.add('u');
+				word.add('a');
+				word.add('y');
+			}else if(str.startsWith("a")|
+					 str.startsWith("e")|
+					 str.startsWith("i")|
+					 str.startsWith("o")|
+					 str.startsWith("u")) {
+				
+				for(int i = 0; i < str.length(); i++) {
+					
+					word.add(str.charAt(i));
+				}
+				word.add('a');
+				word.add('y');
+			}else {
+				for(int i = 1; i < str.length(); i++) {
+					word.add(str.charAt(i));
+				}
+				word.add(str.charAt(0));
+				word.add('a');
+				word.add('y');
+			}
+			for(char c : word) {
+				sb.append(c);
+			}
+
+			sb.append(' ');
+		}
+		
+		return sb.toString().trim();
 	}
 
+		
+	
 	/**
 	 * 9. An Armstrong number is a number that is the sum of its own digits each
 	 * raised to the power of the number of digits.
@@ -267,7 +417,20 @@ public class EvaluationService {
 	 */
 	public boolean isArmstrongNumber(int input) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		int temp = input,
+				num,
+				test = 0,
+				power = String.valueOf(input).length();
+			while(temp > 0){  
+			    num = temp%10;  
+			    temp = temp/10;  
+			    test = (int) (test + Math.pow(num, power));  
+			    }  
+			if(test==input) {
+				return true;
+			}else {
+			return false;
+			}
 	}
 
 	/**
@@ -282,7 +445,23 @@ public class EvaluationService {
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> result = new ArrayList<Long>();
+		int prime = 2;
+		if(l <= 0) {
+			return null;
+		}
+		do {
+			if(l%prime == 0) {
+				result.add((long) prime);
+				l = l/prime;
+			}else {
+				prime += 1;
+			}
+		}while(l >= (prime*prime));
+		if(l != 1) {
+			result.add((long) l);
+		}
+		return result;
 	}
 
 	/**
@@ -321,7 +500,25 @@ public class EvaluationService {
 
 		public String rotate(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String result = "";
+//			string = string.toLowerCase();
+			char ch;
+			for (int i=0; i<string.length(); i++) {
+				if(Character.isLetter(string.charAt(i))) {
+					if(Character.isUpperCase(string.charAt(i))) {
+						ch = (char)(((int)string.charAt(i) +
+								key - 65) % 26 + 65);
+					}else {
+						ch = (char)(((int)string.charAt(i) +
+							key - 97) % 26 + 97);
+					}
+				} else {
+					
+					ch = string.charAt(i);
+				}
+				result += ch;
+			}	
+			return result;
 		}
 
 	}
@@ -338,9 +535,39 @@ public class EvaluationService {
 	 * @param i
 	 * @return
 	 */
-	public int calculateNthPrime(int i) {
+	public int calculateNthPrime(int nth) throws IllegalArgumentException{
 		// TODO Write an implementation for this method declaration
-		return 0;
+		if(nth<1) {
+			throw new IllegalArgumentException();
+		}
+		int primeNum = 0,
+	
+		num = 5,
+		test = 3,
+		count = 2;
+
+		if(nth==1) {
+			return 2;
+		}
+		if(nth==2) {
+			return 3;
+		}
+		while(count<nth) {
+			if(num % test == 0) {
+				if(num == test) {
+					primeNum = num;
+					count++;
+					test = 3;
+					num = num + 2;
+				}else {
+					test = 3;
+					num = num + 2;
+				}
+			}else {
+				test++;
+			}
+		}
+		return primeNum;
 	}
 
 	/**
@@ -377,7 +604,33 @@ public class EvaluationService {
 		 */
 		public static String encode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String encoded = null;
+			StringBuilder sb = new StringBuilder();
+			string = string.toLowerCase().replaceAll("[^a-z0-9]", "");
+
+			for(int i = 0; i < string.length(); i++) {
+				if(Character.isLetter(string.charAt(i))) {
+					char c = string.toLowerCase().charAt(i);
+					int ascii = c;
+					int z = 'z';
+					int a = 'a';
+					
+					if(i==0 || i%5!=0) {
+						sb.append((char) (z-ascii+a));
+					}else {
+						sb.append(' ');
+						sb.append((char) (z-ascii+a));
+					}
+				}else {
+					if(i==0 || i%5!=0) {
+						sb.append(string.charAt(i));
+					}else {
+						sb.append(' ');
+						sb.append(string.charAt(i));
+					}
+				}
+			}
+			return encoded = sb.toString();
 		}
 
 		/**
@@ -388,8 +641,27 @@ public class EvaluationService {
 		 */
 		public static String decode(String string) {
 			// TODO Write an implementation for this method declaration
-			return null;
+			String decoded = null;
+			String str = string.replaceAll(" ", "");
+			StringBuilder sb = new StringBuilder();
+			for(int i = 0; i < str.length(); i++) {
+				if(Character.isLetter(str.charAt(i))) {
+					char c = str.charAt(i);
+					int ascii = c;
+					int z = 'z';
+					int a = 'a';
+				
+					sb.append((char) (z-ascii+a));
+				}else {
+				
+					sb.append(str.charAt(i));
+				
+				}
+
+			}
+			return decoded = sb.toString();
 		}
+
 	}
 
 	/**
@@ -416,11 +688,25 @@ public class EvaluationService {
 	 */
 	public boolean isValidIsbn(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.replaceAll("[^\\dX]", "");
+		int total = 0;
+		for(int i = 0; i<string.length(); i++) {
+			if(Character.isDigit(string.charAt(i))){
+				int num = Character.getNumericValue(string.charAt(i));
+				total += num*(10-i);
+			}else {
+				total += 10*(10-i);
+			}
+		}
+		if(total%11!=0) {
+			return false;
+		}else {
+			return true;
+		}
 	}
 
 	/**
-	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γράμμα, pan
+	 * 16. Determine if a sentence is a pangram. A pangram (Greek: παν γ�?άμμα, pan
 	 * gramma, "every letter") is a sentence using every letter of the alphabet at
 	 * least once. The best known English pangram is:
 	 * 
@@ -434,8 +720,31 @@ public class EvaluationService {
 	 */
 	public boolean isPangram(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.replaceAll(" ", "");
+		boolean[] b = new boolean[26];
+		int count = 1;
+		if(string.length()==0) {
+			return false;
+		}
+		if(string.length()==26) {
+			return true;
+		}
+		String alphabet = "qwertyuiopasdfghjklzxcvbnm";
+		for(int i = 0; i < string.length(); i++) {
+			for(int j = 0; j < alphabet.length(); j++) {
+				if(alphabet.charAt(j)==string.charAt(i)) {
+					b[j] = true;
+				}
+			}
+		}
+		for(boolean t: b) {
+			if(t==false) {
+				return false;
+			}
+		}
+		return true;
 	}
+
 
 	/**
 	 * 17. Calculate the moment when someone has lived for 10^9 seconds.
@@ -465,7 +774,16 @@ public class EvaluationService {
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+		int sum = 0;
+		for (int index = 1; index < i; index++) {
+			for (int num = 0; num < set.length; num++) {
+				if (index % set[num] == 0) {
+					sum += index;
+					break;
+				}
+			}
+		}
+		return sum;
 	}
 
 	/**
@@ -506,7 +824,25 @@ public class EvaluationService {
 	 */
 	public boolean isLuhnValid(String string) {
 		// TODO Write an implementation for this method declaration
-		return false;
+		string = string.replaceAll(" ", "");
+		int sum = 0;
+		char[] numArray = string.toCharArray();
+		for(int i = 1; i<numArray.length; i++) {
+			if(i%2!=0) {
+				int num = Character.getNumericValue(numArray[i]);
+				if((num*2)>9) {
+					numArray[i] = String.valueOf(num*2-9).charAt(0);
+				}else {
+					numArray[i] = String.valueOf(num*2).charAt(0);
+				}
+			}
+			sum += Character.getNumericValue(numArray[i]);		
+		}
+		if(sum%10!=0) {
+				return false;
+		}else {
+			return true;
+		}
 	}
 
 	/**
@@ -538,7 +874,25 @@ public class EvaluationService {
 	 */
 	public int solveWordProblem(String string) {
 		// TODO Write an implementation for this method declaration
-		return 0;
+	
+		String[] splitStr = string.trim().split("\\s+");
+		int firstNum = Integer.parseInt(splitStr[2]);
+		String second = splitStr[splitStr.length-1];
+		second = second.replaceAll("[^-\\d]", "");
+		int secondNum = Integer.parseInt(second);
+
+		String operation = splitStr[3];
+		switch (operation) {
+		case "multiplied":
+			return firstNum * secondNum;
+		case "plus":
+			return firstNum + secondNum;
+		case "minus":
+			return firstNum - secondNum;
+		default:
+			return firstNum/secondNum;
+				
+		}
 	}
 
 }
